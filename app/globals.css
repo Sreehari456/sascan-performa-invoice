@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f1f3ef;
+  --foreground: #16181c;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-schibsted), var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* Sascan palette (from the quotation generator design) */
+  --color-canvas: #f1f3ef;
+  --color-paper: #ffffff;
+  --color-ink: #16181c;
+  --color-muted: #6b7075;
+  --color-line: #d9dcd5;
+  --color-soft: #f7f8f5;
+  --color-brand: #2f7d32;
+  --color-brand-soft: #e3f0e2;
+  --color-brand-ink: #1c4f1f;
+  --color-req: #c0392b;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
