@@ -77,7 +77,7 @@ export function EmailButton({
         className="m-auto w-[calc(100%-2rem)] max-w-lg rounded-[10px] border border-line bg-white p-6 text-ink shadow-xl backdrop:bg-slate-900/40"
       >
         <h2 id={`${formId}-title`} className="text-lg font-semibold">
-          Email performa invoice
+          Email proforma invoice
         </h2>
 
         {!configured ? (
@@ -105,7 +105,7 @@ export function EmailButton({
         ) : sent ? (
           <div className="mt-3 space-y-4">
             <p role="status" className="rounded-lg border border-[#c7dec5] bg-brand-soft px-3 py-2 text-sm text-brand-ink">
-              Sent to {to}. Replies go to the company email on the performa invoice.
+              Sent to {to}. Replies go to the company email on the proforma invoice.
             </p>
             <div className="flex justify-end">
               <button

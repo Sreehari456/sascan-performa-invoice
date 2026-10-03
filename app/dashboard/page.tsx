@@ -71,7 +71,7 @@ export default async function DashboardPage() {
                 <StatusPill status={s} />
                 <span className="mt-2 block text-xl font-semibold text-ink">{formatInrCompact(stats.byStatus[s].value)}</span>
                 <span className="block text-xs text-muted">
-                  {stats.byStatus[s].count} {STATUS_LABELS[s].toLowerCase()} performa invoice
+                  {stats.byStatus[s].count} {STATUS_LABELS[s].toLowerCase()} proforma invoice
                   {stats.byStatus[s].count === 1 ? "" : "s"}
                 </span>
               </Link>
@@ -88,7 +88,7 @@ export default async function DashboardPage() {
             Top customers <span className="text-xs font-medium text-muted">· this financial year, by value</span>
           </h2>
           {stats.topCustomers.length === 0 ? (
-            <p className="text-sm text-muted">No performa invoices yet this financial year.</p>
+            <p className="text-sm text-muted">No proforma invoices yet this financial year.</p>
           ) : (
             <table className="w-full text-[13px]">
               <thead>
@@ -104,7 +104,7 @@ export default async function DashboardPage() {
                     <td className="max-w-0 truncate py-2 pr-3" title={c.name}>
                       <span className="text-ink">{c.name}</span>
                       <span className="block text-xs text-muted">
-                        {c.count} performa invoice{c.count === 1 ? "" : "s"}
+                        {c.count} proforma invoice{c.count === 1 ? "" : "s"}
                       </span>
                     </td>
                     <td className="py-2 text-right tabular-nums text-ink">{formatInrCompact(c.value)}</td>
@@ -169,12 +169,12 @@ function Headline({ stats }: { stats: DashboardStats }) {
         <p className="text-[13px] font-semibold text-muted">Quoted this financial year</p>
         <p className="mt-1 text-[48px] font-semibold leading-none tracking-[-0.03em] text-ink">{formatInrCompact(fy.value)}</p>
         <p className="mt-2 text-xs text-muted">
-          {fy.count} performa invoice{fy.count === 1 ? "" : "s"} since 1 April
+          {fy.count} proforma invoice{fy.count === 1 ? "" : "s"} since 1 April
         </p>
       </div>
 
       <Tile label={`This month (${thisMonth.label})`} value={formatInrCompact(thisMonth.value)}>
-        {thisMonth.count} performa invoice{thisMonth.count === 1 ? "" : "s"}
+        {thisMonth.count} proforma invoice{thisMonth.count === 1 ? "" : "s"}
         {change !== null && (
           <span className={`mt-0.5 block font-semibold ${change >= 0 ? "text-brand-ink" : "text-red-700"}`}>
             {change >= 0 ? "▲" : "▼"} {Math.abs(Math.round(change * 100))}% vs {lastMonth.label}
@@ -188,7 +188,7 @@ function Headline({ stats }: { stats: DashboardStats }) {
 
       <Tile label="Win rate" value={winRate === null ? "—" : `${Math.round(winRate * 100)}%`}>
         {winRate === null
-          ? "Mark performa invoices accepted or declined to see this"
+          ? "Mark proforma invoices accepted or declined to see this"
           : `${byStatus.accepted.count} accepted of ${byStatus.accepted.count + byStatus.declined.count} decided`}
       </Tile>
     </section>

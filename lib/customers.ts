@@ -3,7 +3,7 @@ import { findState } from "@/lib/quotation/states";
 import { GSTIN_PATTERN, normaliseGstin } from "@/lib/quotation/validate";
 
 // Saved customers (public.customers), shared by all staff. Remembered when a
-// performa invoice is saved and suggested in the invoice form.
+// proforma invoice is saved and suggested in the invoice form.
 
 export type CustomerRow = {
   id: string;
@@ -33,7 +33,7 @@ export async function listCustomers(supabase: SupabaseClient): Promise<CustomerR
   return (data ?? []) as CustomerRow[];
 }
 
-/** Customers with how many performa invoices each has, optionally filtered by name or GSTIN. */
+/** Customers with how many proforma invoices each has, optionally filtered by name or GSTIN. */
 export async function listCustomersWithCounts(supabase: SupabaseClient, search: string): Promise<CustomerListRow[]> {
   let query = supabase
     .from("customers")

@@ -8,7 +8,7 @@ import { STATUSES, STATUS_LABELS, isStatus } from "@/lib/quotation/status";
 import { StatusPill } from "./status-pill";
 
 export const metadata: Metadata = {
-  title: pageTitle("Saved performa invoices"),
+  title: pageTitle("Saved proforma invoices"),
 };
 
 export default async function QuotationsPage({ searchParams }: PageProps<"/dashboard/quotations">) {
@@ -40,15 +40,15 @@ export default async function QuotationsPage({ searchParams }: PageProps<"/dashb
     <div className="space-y-6">
       {deleted && (
         <div role="status" className="rounded-lg border border-[#c7dec5] bg-brand-soft px-4 py-3 text-sm text-brand-ink">
-          Performa invoice <span className="font-semibold">{deleted}</span> was deleted.
+          Proforma invoice <span className="font-semibold">{deleted}</span> was deleted.
         </div>
       )}
 
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div className="space-y-1">
-          <h1 className="text-2xl font-bold tracking-[-0.025em] text-ink">Saved performa invoices</h1>
+          <h1 className="text-2xl font-bold tracking-[-0.025em] text-ink">Saved proforma invoices</h1>
           <p className="text-sm text-muted">
-            {result ? `${result.total.toLocaleString("en-IN")} ${result.total === 1 ? "performa invoice" : "performa invoices"}` : " "}
+            {result ? `${result.total.toLocaleString("en-IN")} ${result.total === 1 ? "proforma invoice" : "proforma invoices"}` : " "}
             {status && result ? ` · ${STATUS_LABELS[status].toLowerCase()}` : ""}
             {search && result ? ` matching “${search}”` : ""}
           </p>
@@ -57,13 +57,13 @@ export default async function QuotationsPage({ searchParams }: PageProps<"/dashb
           href="/dashboard/quotations/new"
           className="rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
         >
-          New performa invoice
+          New proforma invoice
         </Link>
       </div>
 
       <form action="/dashboard/quotations" className="flex gap-2" role="search">
         <label htmlFor="q" className="sr-only">
-          Search performa invoices
+          Search proforma invoices
         </label>
         <input
           id="q"
@@ -107,15 +107,15 @@ export default async function QuotationsPage({ searchParams }: PageProps<"/dashb
 
       {!result ? (
         <div role="alert" className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
-          Performa invoices couldn&apos;t be loaded. Please refresh the page to try again.
+          Proforma invoices couldn&apos;t be loaded. Please refresh the page to try again.
         </div>
       ) : result.rows.length === 0 ? (
         <div className="rounded-[10px] border border-dashed border-line bg-white px-6 py-12 text-center">
           <p className="text-sm font-medium text-ink">
-            {search ? "No performa invoices match your search." : "No performa invoices yet."}
+            {search ? "No proforma invoices match your search." : "No proforma invoices yet."}
           </p>
           <p className="mt-1 text-sm text-muted">
-            {search ? "Try a different number or customer name." : "Create your first performa invoice to see it here."}
+            {search ? "Try a different number or customer name." : "Create your first proforma invoice to see it here."}
           </p>
         </div>
       ) : (

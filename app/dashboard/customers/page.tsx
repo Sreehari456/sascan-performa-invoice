@@ -28,7 +28,7 @@ export default async function CustomersPage({ searchParams }: PageProps<"/dashbo
         <p className="text-sm text-muted">
           {customers &&
             `${customers.length.toLocaleString("en-IN")} ${customers.length === 1 ? "customer" : "customers"}${search ? ` matching “${search}”` : ""}. `}
-          Saved automatically when you save a performa invoice.
+          Saved automatically when you save a proforma invoice.
         </p>
       </div>
 
@@ -65,7 +65,7 @@ export default async function CustomersPage({ searchParams }: PageProps<"/dashbo
             {search ? "No customers match your search." : "No customers yet."}
           </p>
           <p className="mt-1 text-sm text-muted">
-            {search ? "Try a different name or GSTIN." : "They're added when you save a performa invoice."}
+            {search ? "Try a different name or GSTIN." : "They're added when you save a proforma invoice."}
           </p>
         </div>
       ) : (

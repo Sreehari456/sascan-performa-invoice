@@ -44,7 +44,7 @@ async function requireStaff(): Promise<Staff | Fail> {
     return {
       ok: false,
       error:
-        "Your account doesn't have a staff profile yet, so performa invoices can't be saved under your name. Ask an administrator to add your profile.",
+        "Your account doesn't have a staff profile yet, so proforma invoices can't be saved under your name. Ask an administrator to add your profile.",
     };
   }
   return { supabase, userId, role: profile.role };
@@ -214,7 +214,7 @@ export async function saveQuotation(
   const linkedCustomerId = await rememberCustomer(supabase, customerId, q);
 
   if (id) {
-    if (!isUuid(id)) return { ok: false, error: "Invalid performa invoice." };
+    if (!isUuid(id)) return { ok: false, error: "Invalid proforma invoice." };
     const { invoice, items } = toRecords(q, company, linkedCustomerId);
     const { error } = await supabase.rpc("update_quotation", { p_id: id, p_invoice: invoice, p_items: items });
     if (error?.code === "23505") {
@@ -224,7 +224,7 @@ export async function saveQuotation(
     if (error?.code === "42501" || error?.code === "P0001") {
       return {
         ok: false,
-        error: "Only the person who created this performa invoice can change it. Use New to save it as a new one.",
+        error: "Only the person who created this proforma invoice can change it. Use New to save it as a new one.",
       };
     }
     if (error) return { ok: false, error: databaseErrorMessage(error) };
@@ -249,7 +249,7 @@ export async function openQuotation(id: string): Promise<{ ok: true; quotation: 
   const supabase = await createClient();
   try {
     const quotation = await getQuotation(supabase, id);
-    if (!quotation) return { ok: false, error: "That performa invoice no longer exists." };
+    if (!quotation) return { ok: false, error: "That proforma invoice no longer exists." };
     return { ok: true, quotation };
   } catch (error) {
     return { ok: false, error: databaseErrorMessage(error as PostgrestError) };
@@ -258,7 +258,7 @@ export async function openQuotation(id: string): Promise<{ ok: true; quotation: 
 
 /** Deletes a quotation; RLS only lets its creator do this. Items go with it (ON DELETE CASCADE). */
 export async function removeQuotation(id: string): Promise<{ ok: true } | Fail> {
-  if (!isUuid(id)) return { ok: false, error: "Invalid performa invoice." };
+  if (!isUuid(id)) return { ok: false, error: "Invalid proforma invoice." };
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("invoices")
@@ -268,7 +268,7 @@ export async function removeQuotation(id: string): Promise<{ ok: true } | Fail> 
     .select("id");
   if (error) return { ok: false, error: databaseErrorMessage(error) };
   if (!data || data.length === 0) {
-    return { ok: false, error: "Only the person who created this performa invoice can delete it." };
+    return { ok: false, error: "Only the person who created this proforma invoice can delete it." };
   }
   revalidateQuotations();
   return { ok: true };
@@ -400,7 +400,7 @@ async function requireAdmin(): Promise<Staff | Fail> {
   return staff;
 }
 
-/** Saves the company details printed on every performa invoice. */
+/** Saves the company details printed on every proforma invoice. */
 export async function saveCompanyDetails(input: CompanyInput): Promise<SaveCompanyResult> {
   const staff = await requireAdmin();
   if (isFail(staff)) return staff;
@@ -421,7 +421,7 @@ export async function saveCompanyDetails(input: CompanyInput): Promise<SaveCompa
     return { ok: false, error: "The company details couldn't be saved. You may not have permission to change them." };
   }
 
-  // Saved performa invoices and their PDFs print these details too.
+  // Saved proforma invoices and their PDFs print these details too.
   revalidatePath("/dashboard", "layout");
   return { ok: true, values: companyToInput(rowToCompany(result.row)) };
 }

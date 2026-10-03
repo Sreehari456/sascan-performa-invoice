@@ -13,7 +13,7 @@ import { createClient } from "@/lib/supabase/server";
  * invoice_items are removed by the ON DELETE CASCADE foreign key.
  */
 export async function deleteQuotation(id: string): Promise<{ error: string }> {
-  if (!isUuid(id)) return { error: "Invalid performa invoice." };
+  if (!isUuid(id)) return { error: "Invalid proforma invoice." };
 
   const supabase = await createClient();
   const { data: auth } = await supabase.auth.getClaims();
@@ -30,13 +30,13 @@ export async function deleteQuotation(id: string): Promise<{ error: string }> {
 
   if (error) {
     console.error("Failed to delete quotation:", error);
-    return { error: "The performa invoice couldn't be deleted. Please try again." };
+    return { error: "The proforma invoice couldn't be deleted. Please try again." };
   }
   // RLS filters out rows the user may not delete, so nothing is deleted
   // rather than an error being raised.
   if (!data || data.length === 0) {
     return {
-      error: "This performa invoice couldn't be deleted. Only the person who created it can delete it.",
+      error: "This proforma invoice couldn't be deleted. Only the person who created it can delete it.",
     };
   }
 
@@ -48,7 +48,7 @@ export async function setQuotationStatus(
   id: string,
   status: string,
 ): Promise<{ ok: true; status: Status } | { ok: false; error: string }> {
-  if (!isUuid(id)) return { ok: false, error: "Invalid performa invoice." };
+  if (!isUuid(id)) return { ok: false, error: "Invalid proforma invoice." };
   if (!isStatus(status)) return { ok: false, error: "Unknown status." };
 
   const supabase = await createClient();
@@ -94,7 +94,7 @@ function parseAddresses(value: string): string[] | null {
  * as sent. Replies go to the company email printed on the quotation.
  */
 export async function sendQuotationEmail(id: string, input: EmailInput): Promise<EmailResult> {
-  if (!isUuid(id)) return { ok: false, error: "Invalid performa invoice." };
+  if (!isUuid(id)) return { ok: false, error: "Invalid proforma invoice." };
   if (!emailConfigured()) {
     return { ok: false, error: "Email isn't set up yet. Ask an administrator to add RESEND_API_KEY and EMAIL_FROM." };
   }
@@ -120,7 +120,7 @@ export async function sendQuotationEmail(id: string, input: EmailInput): Promise
   if (!userId) return { ok: false, error: "Your session has expired. Sign in again and retry." };
 
   const quotation = await getQuotation(supabase, id).catch(() => null);
-  if (!quotation) return { ok: false, error: "This performa invoice no longer exists." };
+  if (!quotation) return { ok: false, error: "This proforma invoice no longer exists." };
 
   let rendered;
   try {

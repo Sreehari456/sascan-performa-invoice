@@ -53,7 +53,7 @@ function CustomerItem({ customer }: { customer: CustomerListRow }) {
   function remove() {
     const invoices =
       customer.invoice_count > 0
-        ? ` Their ${customer.invoice_count} performa invoice${customer.invoice_count === 1 ? " is" : "s are"} kept.`
+        ? ` Their ${customer.invoice_count} proforma invoice${customer.invoice_count === 1 ? " is" : "s are"} kept.`
         : "";
     if (!window.confirm(`Delete ${customer.name} from your customers?${invoices}`)) return;
     startWork(async () => {
@@ -101,7 +101,7 @@ function CustomerItem({ customer }: { customer: CustomerListRow }) {
             </Labelled>
           </div>
           <Labelled label="Email" htmlFor={`${customer.id}-email`} error={errors.email}>
-            <input type="email" {...field("email")} placeholder="Used when emailing performa invoices" />
+            <input type="email" {...field("email")} placeholder="Used when emailing proforma invoices" />
           </Labelled>
           <Labelled label="State" htmlFor={`${customer.id}-stateCode`} error={errors.stateCode}>
             <select {...field("stateCode")}>
@@ -127,7 +127,7 @@ function CustomerItem({ customer }: { customer: CustomerListRow }) {
             </button>
           </div>
           <p className="text-xs text-muted sm:col-span-2">
-            Performa invoices already saved keep the details they were saved with.
+            Proforma invoices already saved keep the details they were saved with.
           </p>
         </form>
       </li>
@@ -142,7 +142,7 @@ function CustomerItem({ customer }: { customer: CustomerListRow }) {
         <p className="mt-1 text-xs text-muted">
           {customer.state_code} — {customer.state} · GSTIN {customer.gstin ?? "URP"} ·{" "}
           {customer.email && <>{customer.email} · </>}
-          {customer.invoice_count} performa invoice{customer.invoice_count === 1 ? "" : "s"}
+          {customer.invoice_count} proforma invoice{customer.invoice_count === 1 ? "" : "s"}
         </p>
         {message && <p role="alert" className="mt-1 text-sm text-req">{message}</p>}
       </div>
@@ -151,7 +151,7 @@ function CustomerItem({ customer }: { customer: CustomerListRow }) {
           href={`/dashboard/quotations/new?customer=${customer.id}`}
           className="rounded-lg border border-brand bg-brand px-[13px] py-2 text-[13px] font-semibold text-white hover:bg-brand-ink"
         >
-          New performa invoice
+          New proforma invoice
         </Link>
         <button type="button" onClick={startEditing} disabled={busy} className={ghostButton}>
           Edit

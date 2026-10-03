@@ -1,4 +1,4 @@
-// Where a performa invoice stands with the customer.
+// Where a proforma invoice stands with the customer.
 
 export const STATUSES = ["draft", "sent", "accepted", "declined"] as const;
 export type Status = (typeof STATUSES)[number];

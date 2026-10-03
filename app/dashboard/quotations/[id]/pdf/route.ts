@@ -19,10 +19,10 @@ export async function GET(_request: Request, ctx: RouteContext<"/dashboard/quota
     quotation = await getQuotation(supabase, id);
   } catch (error) {
     console.error("Failed to load quotation for PDF:", error);
-    return Response.json({ error: "The performa invoice couldn't be loaded." }, { status: 500 });
+    return Response.json({ error: "The proforma invoice couldn't be loaded." }, { status: 500 });
   }
   if (!quotation) {
-    return Response.json({ error: "Performa invoice not found." }, { status: 404 });
+    return Response.json({ error: "Proforma invoice not found." }, { status: 404 });
   }
 
   let rendered;

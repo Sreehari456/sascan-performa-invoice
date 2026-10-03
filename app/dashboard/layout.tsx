@@ -38,8 +38,8 @@ export default async function DashboardLayout({
 
         <nav aria-label="Main" className="order-3 flex w-full gap-1 overflow-x-auto sm:order-none sm:w-auto">
           <NavLink href="/dashboard">Dashboard</NavLink>
-          <NavLink href="/dashboard/quotations/new">New performa invoice</NavLink>
-          <NavLink href="/dashboard/quotations">Saved performa invoices</NavLink>
+          <NavLink href="/dashboard/quotations/new">New proforma invoice</NavLink>
+          <NavLink href="/dashboard/quotations">Saved proforma invoices</NavLink>
           <NavLink href="/dashboard/customers">Customers</NavLink>
           <NavLink href="/dashboard/products">Products</NavLink>
           {isAdmin && <NavLink href="/dashboard/users">Users</NavLink>}

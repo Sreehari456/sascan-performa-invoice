@@ -16,7 +16,7 @@ import { QuotationPreview } from "./quotation-preview";
 import { StatusControl } from "./status-control";
 
 export const metadata: Metadata = {
-  title: pageTitle("Performa invoice"),
+  title: pageTitle("Proforma invoice"),
 };
 
 type SentEmail = { id: string; to_email: string; cc_email: string | null; sent_at: string; profiles: { name: string } | null };
@@ -58,7 +58,7 @@ export default async function QuotationPage({ params, searchParams }: PageProps<
     <div className="space-y-5">
       {justSaved && (
         <div role="status" className="rounded-[10px] border border-[#c7dec5] bg-brand-soft px-4 py-3 text-sm text-brand-ink">
-          Performa invoice <b>{quotation.invoice_number}</b> was saved
+          Proforma invoice <b>{quotation.invoice_number}</b> was saved
           {autoDownload ? " — your PDF is downloading." : "."}
         </div>
       )}
@@ -66,7 +66,7 @@ export default async function QuotationPage({ params, searchParams }: PageProps<
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="space-y-1">
           <Link href="/dashboard/quotations" className="text-[13px] font-semibold text-brand hover:text-brand-ink">
-            ← Saved performa invoices
+            ← Saved proforma invoices
           </Link>
           <h1 className="text-xl font-bold tracking-[-0.025em] sm:text-2xl">{quotation.invoice_number}</h1>
           <p className="text-[13px] text-muted">
@@ -97,7 +97,7 @@ export default async function QuotationPage({ params, searchParams }: PageProps<
             <button
               type="button"
               disabled
-              title="Only the person who created this performa invoice can edit it."
+              title="Only the person who created this proforma invoice can edit it."
               className="cursor-not-allowed rounded-lg border border-line bg-transparent px-4 py-2 text-sm font-semibold text-ink opacity-50"
             >
               Edit

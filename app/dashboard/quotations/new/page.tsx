@@ -10,13 +10,13 @@ import { fetchNextSequenceNo } from "@/lib/quotation/sequence";
 import { QuotationForm } from "./quotation-form";
 
 export const metadata: Metadata = {
-  title: pageTitle("New performa invoice"),
+  title: pageTitle("New proforma invoice"),
 };
 
 const RECENT_COUNT = 10;
 
 /**
- * The performa invoice generator. `?edit=<id>` opens a saved one in the form;
+ * The proforma invoice generator. `?edit=<id>` opens a saved one in the form;
  * `?customer=<id>` starts a new one for a saved customer.
  */
 export default async function NewQuotationPage({ searchParams }: PageProps<"/dashboard/quotations/new">) {

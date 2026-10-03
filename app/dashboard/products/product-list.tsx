@@ -45,7 +45,7 @@ export function ProductList({ products, searching }: { products: ProductRow[]; s
           <p className="mt-1 text-sm text-muted">
             {searching
               ? "Try a different name or HSN code."
-              : "Add one here, or use “Save to products” on an item in a performa invoice."}
+              : "Add one here, or use “Save to products” on an item in a proforma invoice."}
           </p>
         </div>
       ) : (
@@ -65,7 +65,7 @@ function ProductItem({ product }: { product: ProductRow }) {
   const [busy, startWork] = useTransition();
 
   function remove() {
-    if (!window.confirm(`Delete ${product.name} from your products? Performa invoices that use it are not changed.`)) return;
+    if (!window.confirm(`Delete ${product.name} from your products? Proforma invoices that use it are not changed.`)) return;
     startWork(async () => {
       const result = await deleteProduct(product.id);
       if (!result.ok) setMessage(result.error);
@@ -80,7 +80,7 @@ function ProductItem({ product }: { product: ProductRow }) {
           submitLabel="Save product"
           onSubmit={(input) => updateProduct(product.id, input)}
           onDone={() => setEditing(false)}
-          note="Performa invoices already saved keep the details they were saved with."
+          note="Proforma invoices already saved keep the details they were saved with."
         />
       </li>
     );

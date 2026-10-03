@@ -3,9 +3,9 @@ import { DEFAULT_COMPANY_STATE_CODE } from "@/lib/quotation/calc";
 import { findState } from "@/lib/quotation/states";
 import { GSTIN_PATTERN, normaliseGstin } from "@/lib/quotation/validate";
 
-// Company and bank details printed on performa invoices. They live in the
+// Company and bank details printed on proforma invoices. They live in the
 // public.company_settings table and are edited in the "Company details" card
-// of the performa invoice form. The logo and signature images live in the
+// of the proforma invoice form. The logo and signature images live in the
 // private company-assets Storage bucket.
 
 /** Printed when no logo has been uploaded. */

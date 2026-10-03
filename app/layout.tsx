@@ -21,7 +21,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: APP_NAME,
-  description: "Performa invoices for Sascan Meditech.",
+  description: "Proforma invoices for Sascan Meditech.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

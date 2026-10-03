@@ -6,7 +6,7 @@ import { formatInrCompact, niceTicks, type MonthPoint } from "@/lib/dashboard";
 const PLOT_HEIGHT = 200; // px
 
 /**
- * Performa invoice value per month of the financial year: one series, so no
+ * Proforma invoice value per month of the financial year: one series, so no
  * legend (the title names it). Each column is a hover/focus target with a
  * tooltip, the highest month carries a direct label, and the same numbers are
  * in the table underneath.
@@ -22,7 +22,7 @@ export function MonthlyChart({ months, financialYear }: { months: MonthPoint[]; 
     <figure className="rounded-[10px] border border-line bg-white p-5">
       <figcaption className="mb-4">
         <span className="block text-[15px] font-bold text-ink">Value by month</span>
-        <span className="block text-xs text-muted">FY {financialYear} · performa invoice totals including GST</span>
+        <span className="block text-xs text-muted">FY {financialYear} · proforma invoice totals including GST</span>
       </figcaption>
 
       <div className="flex gap-2">
@@ -55,7 +55,7 @@ export function MonthlyChart({ months, financialYear }: { months: MonthPoint[]; 
                 const height = (m.value / top) * PLOT_HEIGHT;
                 const summary = m.future
                   ? `${m.longLabel}: not yet`
-                  : `${m.longLabel}: ${formatInrCompact(m.value)}, ${m.count} performa invoice${m.count === 1 ? "" : "s"}`;
+                  : `${m.longLabel}: ${formatInrCompact(m.value)}, ${m.count} proforma invoice${m.count === 1 ? "" : "s"}`;
                 return (
                   // The whole column slot is the hit target, not just the bar.
                   <button
@@ -109,7 +109,7 @@ export function MonthlyChart({ months, financialYear }: { months: MonthPoint[]; 
           <thead>
             <tr className="text-left text-xs text-muted">
               <th scope="col" className="py-1 font-semibold">Month</th>
-              <th scope="col" className="py-1 text-right font-semibold">Performa invoices</th>
+              <th scope="col" className="py-1 text-right font-semibold">Proforma invoices</th>
               <th scope="col" className="py-1 text-right font-semibold">Value</th>
             </tr>
           </thead>
@@ -153,7 +153,7 @@ function Tooltip({
       </span>
       <span className="block text-xs text-muted">
         {month.longLabel}
-        {!month.future && ` · ${month.count} performa invoice${month.count === 1 ? "" : "s"}`}
+        {!month.future && ` · ${month.count} proforma invoice${month.count === 1 ? "" : "s"}`}
       </span>
     </span>
   );

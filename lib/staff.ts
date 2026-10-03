@@ -5,7 +5,7 @@ export type Role = (typeof ROLES)[number];
 
 export const ROLE_LABELS: Record<Role, string> = {
   admin: "Admin — everything, including company details and users",
-  accounts: "Accounts — performa invoices, customers and products",
+  accounts: "Accounts — proforma invoices, customers and products",
 };
 
 export const MIN_PASSWORD_LENGTH = 8;

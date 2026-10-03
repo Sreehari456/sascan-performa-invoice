@@ -28,7 +28,7 @@ export default async function ProductsPage({ searchParams }: PageProps<"/dashboa
         <p className="text-sm text-muted">
           {products &&
             `${products.length.toLocaleString("en-IN")} ${products.length === 1 ? "product" : "products"}${search ? ` matching “${search}”` : ""}. `}
-          Pick these when adding an item to a performa invoice.
+          Pick these when adding an item to a proforma invoice.
         </p>
       </div>
 

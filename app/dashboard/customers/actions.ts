@@ -17,7 +17,7 @@ function errorMessage(error: PostgrestError): string {
 }
 
 /**
- * Updates a saved customer. Performa invoices already issued keep the details
+ * Updates a saved customer. Proforma invoices already issued keep the details
  * they were saved with; only new ones use the change.
  */
 export async function updateCustomer(id: string, input: CustomerInput): Promise<{ ok: true; customer: CustomerRow } | Fail> {
@@ -41,7 +41,7 @@ export async function updateCustomer(id: string, input: CustomerInput): Promise<
   return { ok: true, customer: data[0] as CustomerRow };
 }
 
-/** Deletes a saved customer. Their performa invoices are kept, just unlinked. */
+/** Deletes a saved customer. Their proforma invoices are kept, just unlinked. */
 export async function deleteCustomer(id: string): Promise<{ ok: true } | Fail> {
   if (!isUuid(id)) return { ok: false, error: "Invalid customer." };
   const supabase = await createClient();

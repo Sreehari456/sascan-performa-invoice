@@ -29,7 +29,7 @@ export default async function LoginPage() {
             {DOCUMENT_TITLE}
           </h2>
           <p className="max-w-sm text-base leading-relaxed text-sky-100/80">
-            Create, manage and track performa invoices for Sascan&apos;s customers in one place.
+            Create, manage and track proforma invoices for Sascan&apos;s customers in one place.
           </p>
         </div>
 

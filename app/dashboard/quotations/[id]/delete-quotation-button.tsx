@@ -35,7 +35,7 @@ export function DeleteQuotationButton({
         type="button"
         onClick={open}
         disabled={!canDelete}
-        title={canDelete ? undefined : "Only the person who created this performa invoice can delete it."}
+        title={canDelete ? undefined : "Only the person who created this proforma invoice can delete it."}
         className="rounded-lg border border-red-200 bg-white px-3 py-2 text-sm font-medium text-red-700 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-white"
       >
         Delete
@@ -50,7 +50,7 @@ export function DeleteQuotationButton({
         className="m-auto w-[calc(100%-2rem)] max-w-md rounded-[10px] border border-line bg-white p-6 text-ink shadow-xl backdrop:bg-slate-900/40"
       >
         <h2 id="delete-quotation-title" className="text-lg font-semibold">
-          Delete performa invoice?
+          Delete proforma invoice?
         </h2>
         <p className="mt-2 text-sm text-muted">
           <span className="font-semibold text-ink">{quotationNumber}</span> and all of its
@@ -81,7 +81,7 @@ export function DeleteQuotationButton({
             {deleting && (
               <span aria-hidden className="size-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
             )}
-            {deleting ? "Deleting…" : "Delete performa invoice"}
+            {deleting ? "Deleting…" : "Delete proforma invoice"}
           </button>
         </div>
       </dialog>

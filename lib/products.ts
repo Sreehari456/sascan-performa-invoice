@@ -3,7 +3,7 @@ import { hundredthsToDecimal, parseHundredths } from "@/lib/quotation/calc";
 import { toHundredths } from "@/lib/quotation/queries";
 
 // Saved products (public.products), shared by all staff. Picked when adding an
-// item to a performa invoice; saved on purpose, never from an invoice save.
+// item to a proforma invoice; saved on purpose, never from an invoice save.
 
 export type ProductRow = {
   id: string;

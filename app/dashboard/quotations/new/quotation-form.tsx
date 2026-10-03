@@ -730,8 +730,8 @@ export function QuotationForm({
           <Card step={1} title="Company details" sub={companyDirty ? "· unsaved changes" : "· saved"}>
             <p className="mb-3.5 text-[11.5px] leading-normal text-muted">
               {canEditCompany
-                ? "Set once and saved for everyone. Printed on every performa invoice."
-                : "Printed on every performa invoice. Only administrators can change these."}
+                ? "Set once and saved for everyone. Printed on every proforma invoice."
+                : "Printed on every proforma invoice. Only administrators can change these."}
             </p>
             <Field label="Company name" htmlFor="company-name" error={companyErrors.name}>
               <input {...companyField("name")} />
