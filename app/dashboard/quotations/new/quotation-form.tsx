@@ -16,7 +16,7 @@ import {
 } from "@/lib/company";
 import { DOCUMENT_TITLE } from "@/lib/branding";
 import { matchCustomers, type CustomerRow } from "@/lib/customers";
-import { itemMatchesProduct, matchProducts, plainDecimal, type ProductRow } from "@/lib/products";
+import { fixedProductFor, itemMatchesProduct, matchProducts, plainDecimal, type ProductRow } from "@/lib/products";
 import {
   computeLine,
   hundredthsToDecimal,
@@ -265,9 +265,19 @@ export function QuotationForm({
   const companyStateCode = companyInput.stateCode;
   const taxMode = state ? taxModeFor(state.code, companyStateCode) : null;
 
-  const lineAmounts = useMemo(
+  // Items named like a fixed-price product (e.g. OralScan) always use its price.
+  const items = useMemo(
     () =>
       q.items.map((item) => {
+        const fixed = fixedProductFor(products, item.itemName);
+        return fixed ? { ...item, rate: plainDecimal(fixed.rate) } : item;
+      }),
+    [q.items, products],
+  );
+
+  const lineAmounts = useMemo(
+    () =>
+      items.map((item) => {
         const quantity = parseHundredths(item.quantity);
         const rate = parseHundredths(item.rate);
         const gstRate = parseHundredths(item.gstRate);
@@ -275,7 +285,7 @@ export function QuotationForm({
         // Until a state is chosen, show taxable value only.
         return computeLine(quantity, rate, taxMode && gstRate !== null ? gstRate : ZERO, taxMode ?? "inter");
       }),
-    [q.items, taxMode],
+    [items, taxMode],
   );
   const totals = sumLines(lineAmounts);
 
@@ -314,7 +324,7 @@ export function QuotationForm({
       created_by: "",
       status: "draft",
       status_changed_at: null,
-      invoice_items: q.items.map((item, i) => {
+      invoice_items: items.map((item, i) => {
         const amounts = lineAmounts[i];
         return {
           id: item.id,
@@ -334,7 +344,7 @@ export function QuotationForm({
         };
       }),
     };
-  }, [displayNumber, q, seq, normalisedGstin, state, companyStateCode, totals, lineAmounts, taxMode]);
+  }, [displayNumber, q, seq, normalisedGstin, state, companyStateCode, totals, items, lineAmounts, taxMode]);
 
   // ---- Customer ----
   const linkedCustomer = q.customerId ? customers.find((c) => c.id === q.customerId) ?? null : null;
@@ -541,7 +551,7 @@ export function QuotationForm({
       customerStateCode: q.customerStateCode,
       customerGstin: q.customerGstin,
       quotationDate: q.quotationDate,
-      items: q.items.map(({ itemName, shortDescription, description, hsnCode, quantity, rate, gstRate }) => ({
+      items: items.map(({ itemName, shortDescription, description, hsnCode, quantity, rate, gstRate }) => ({
         itemName,
         shortDescription,
         description,
@@ -1010,7 +1020,7 @@ export function QuotationForm({
           <Card step={3} title="Items" required defaultOpen>
             {fieldErrors.items && <p className="mb-2.5 text-xs text-req">{fieldErrors.items}</p>}
 
-            {q.items.map((item, index) => {
+            {items.map((item, index) => {
               const err = (field: string) => fieldErrors[`items.${index}.${field}`];
               const id = (field: string) => `${item.id}-${field}`;
               const amounts = lineAmounts[index];
@@ -1101,13 +1111,15 @@ export function QuotationForm({
                         className={`${inputBase} tabular-nums ${err("quantity") ? inputBad : inputOk}`}
                       />
                     </Field>
-                    <Field label="Rate (₹)" htmlFor={id("rate")} error={err("rate")} compact>
+                    <Field label={fixedProductFor(products, item.itemName) ? "Rate (₹) 🔒" : "Rate (₹)"} htmlFor={id("rate")} error={err("rate")} compact>
                       <input
                         id={id("rate")}
                         value={item.rate}
                         inputMode="decimal"
+                        readOnly={Boolean(fixedProductFor(products, item.itemName))}
+                        title={fixedProductFor(products, item.itemName) ? "Fixed price — can't be changed" : undefined}
                         onChange={(e) => updateItem(item.id, index, "rate", e.target.value)}
-                        className={`${inputBase} tabular-nums ${err("rate") ? inputBad : inputOk}`}
+                        className={`${inputBase} tabular-nums ${err("rate") ? inputBad : inputOk} read-only:bg-soft read-only:text-muted`}
                       />
                     </Field>
                     <Field label="GST %" htmlFor={id("gstRate")} error={err("gstRate")} compact>

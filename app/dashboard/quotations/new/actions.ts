@@ -16,7 +16,9 @@ import {
   type CompanyInput,
   type CompanySnapshot,
 } from "@/lib/company";
+import { fixedProductFor, listFixedRates } from "@/lib/products";
 import { hundredthsToDecimal } from "@/lib/quotation/calc";
+import { formatRupees } from "@/lib/quotation/format";
 import { getQuotation, isUuid, listQuotationsForBackup, type QuotationRow } from "@/lib/quotation/queries";
 import { fetchNextSequenceNo } from "@/lib/quotation/sequence";
 import { isFinancialYear, validateQuotation, type FieldErrors, type QuotationInput, type ValidQuotation } from "@/lib/quotation/validate";
@@ -86,6 +88,20 @@ async function rememberCustomer(
     return null;
   }
   return (data as string | null) ?? null;
+}
+
+type FixedRates = Awaited<ReturnType<typeof listFixedRates>>;
+
+/** Items named like a fixed-price product (e.g. OralScan) must use its price. */
+function fixedRateErrors(q: ValidQuotation, fixed: FixedRates): FieldErrors {
+  const errors: FieldErrors = {};
+  q.items.forEach((item, i) => {
+    const product = fixedProductFor(fixed, item.itemName);
+    if (product && item.rate !== product.rate) {
+      errors[`items.${i}.rate`] = `${product.name} has a fixed price of ₹${formatRupees(product.rate)}.`;
+    }
+  });
+  return errors;
 }
 
 function toRecords(q: ValidQuotation, company: CompanySnapshot, customerId: string | null) {
@@ -211,6 +227,18 @@ export async function saveQuotation(
     return { ok: false, error: "Please fix the highlighted fields.", fieldErrors: result.errors };
   }
   const q = result.data;
+
+  let fixed: FixedRates;
+  try {
+    fixed = await listFixedRates(supabase);
+  } catch (error) {
+    return { ok: false, error: databaseErrorMessage(error as PostgrestError) };
+  }
+  const priceErrors = fixedRateErrors(q, fixed);
+  if (Object.keys(priceErrors).length > 0) {
+    return { ok: false, error: Object.values(priceErrors)[0], fieldErrors: priceErrors };
+  }
+
   const linkedCustomerId = await rememberCustomer(supabase, customerId, q);
 
   if (id) {
@@ -344,6 +372,7 @@ export async function importBackup(backup: BackupFile, replaceCompany: boolean):
   }
 
   const company = await currentCompanySnapshot(supabase);
+  const fixed = await listFixedRates(supabase).catch(() => [] as FixedRates);
   let imported = 0;
   let skipped = 0;
   const failed: { number: string; reason: string }[] = [];
@@ -353,6 +382,11 @@ export async function importBackup(backup: BackupFile, replaceCompany: boolean):
     const result = validateQuotation(backupEntryToInput(entry), company.stateCode);
     if (!result.ok) {
       failed.push({ number, reason: Object.values(result.errors)[0] ?? "Invalid data." });
+      continue;
+    }
+    const priceErrors = fixedRateErrors(result.data, fixed);
+    if (Object.keys(priceErrors).length > 0) {
+      failed.push({ number, reason: Object.values(priceErrors)[0] });
       continue;
     }
     const inserted = await insertQuotation(

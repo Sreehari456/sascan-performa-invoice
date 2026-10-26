@@ -13,9 +13,11 @@ export type ProductRow = {
   hsn_code: string | null;
   rate: number | string;
   gst_rate: number | string;
+  /** The price is locked: invoices must use it and nobody can change it. */
+  fixed_rate: boolean;
 };
 
-const COLUMNS = "id, name, short_description, description, hsn_code, rate, gst_rate";
+const COLUMNS = "id, name, short_description, description, hsn_code, rate, gst_rate, fixed_rate";
 const MAX_PRODUCTS = 2000;
 
 /** Every product, by name, optionally filtered by name or HSN code. */
@@ -123,6 +125,23 @@ export function validateProduct(
       gst_rate: hundredthsToDecimal(gstRate),
     },
   };
+}
+
+/** The fixed-price product an item name refers to, if any (names match ignoring case and spaces). */
+export function fixedProductFor<T extends { name: string; fixed_rate: boolean }>(
+  products: T[],
+  itemName: string,
+): T | null {
+  const name = itemName.trim().toLowerCase();
+  if (!name) return null;
+  return products.find((p) => p.fixed_rate && p.name.toLowerCase() === name) ?? null;
+}
+
+/** Fixed-price products, as name -> rate in paise. Read on the server before saving. */
+export async function listFixedRates(supabase: SupabaseClient): Promise<{ name: string; rate: bigint; fixed_rate: true }[]> {
+  const { data, error } = await supabase.from("products").select("name, rate").eq("fixed_rate", true);
+  if (error) throw error;
+  return (data ?? []).map((p) => ({ name: p.name as string, rate: toHundredths(p.rate), fixed_rate: true as const }));
 }
 
 /** Whether an item as typed is the same as the saved product (so there's nothing to save). */

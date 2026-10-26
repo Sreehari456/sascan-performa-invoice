@@ -77,10 +77,15 @@ function ProductItem({ product }: { product: ProductRow }) {
       <li className="bg-soft px-4 py-4">
         <ProductForm
           initial={productToInput(product)}
+          fixed={product.fixed_rate}
           submitLabel="Save product"
           onSubmit={(input) => updateProduct(product.id, input)}
           onDone={() => setEditing(false)}
-          note="Proforma invoices already saved keep the details they were saved with."
+          note={
+            product.fixed_rate
+              ? "This product has a fixed price: its name and rate can't be changed. Proforma invoices already saved keep the details they were saved with."
+              : "Proforma invoices already saved keep the details they were saved with."
+          }
         />
       </li>
     );
@@ -97,7 +102,13 @@ function ProductItem({ product }: { product: ProductRow }) {
           <p className="mt-0.5 line-clamp-3 whitespace-pre-line text-[13px] leading-snug text-muted">{product.description}</p>
         )}
         <p className="mt-1 text-xs text-muted">
-          <span className="font-semibold text-ink">₹{formatRupees(toHundredths(product.rate))}</span> · GST{" "}
+          <span className="font-semibold text-ink">₹{formatRupees(toHundredths(product.rate))}</span>
+          {product.fixed_rate && (
+            <span className="ml-1.5 rounded-full border border-line bg-soft px-2 py-0.5 text-[11px] font-semibold text-muted">
+              🔒 Fixed price
+            </span>
+          )}{" "}
+          · GST{" "}
           {Number(product.gst_rate)}% · HSN {product.hsn_code ?? "—"}
         </p>
         {message && <p role="alert" className="mt-1 text-sm text-req">{message}</p>}
@@ -114,6 +125,7 @@ function ProductItem({ product }: { product: ProductRow }) {
         >
           Edit
         </button>
+        {!product.fixed_rate && (
         <button
           type="button"
           onClick={remove}
@@ -122,6 +134,7 @@ function ProductItem({ product }: { product: ProductRow }) {
         >
           {busy ? "…" : "Delete"}
         </button>
+        )}
       </div>
     </li>
   );
@@ -133,8 +146,11 @@ function ProductForm({
   onSubmit,
   onDone,
   note,
+  fixed = false,
 }: {
   initial: ProductInput;
+  /** A fixed-price product: name and rate are locked. */
+  fixed?: boolean;
   submitLabel: string;
   onSubmit: (input: ProductInput) => Promise<{ ok: true } | { ok: false; error: string; fieldErrors?: ProductFieldErrors }>;
   onDone: () => void;
@@ -180,7 +196,12 @@ function ProductForm({
       className="grid gap-3 sm:grid-cols-2"
     >
       <Labelled label="Product name" htmlFor={`${idPrefix}-name`} error={errors.name}>
-        <input {...field("name")} placeholder="Prints in bold, e.g. OralScan" />
+        <input
+          {...field("name")}
+          readOnly={fixed}
+          placeholder="Prints in bold, e.g. OralScan"
+          className={`${field("name").className} read-only:bg-soft read-only:text-muted`}
+        />
       </Labelled>
       <Labelled label="Short description" htmlFor={`${idPrefix}-shortDescription`} error={errors.shortDescription}>
         <input {...field("shortDescription")} placeholder="e.g. Hand-held Imaging System" />
@@ -200,7 +221,12 @@ function ProductForm({
           <input inputMode="numeric" {...field("hsnCode")} />
         </Labelled>
         <Labelled label="Rate (₹)" htmlFor={`${idPrefix}-rate`} error={errors.rate}>
-          <input inputMode="decimal" {...field("rate")} className={`${field("rate").className} tabular-nums`} />
+          <input
+            inputMode="decimal"
+            {...field("rate")}
+            readOnly={fixed}
+            className={`${field("rate").className} tabular-nums read-only:bg-soft read-only:text-muted`}
+          />
         </Labelled>
         <Labelled label="GST %" htmlFor={`${idPrefix}-gstRate`} error={errors.gstRate}>
           <select {...field("gstRate")}>

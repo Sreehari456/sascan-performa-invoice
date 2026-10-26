@@ -10,6 +10,8 @@ type Fail = { ok: false; error: string; fieldErrors?: ProductFieldErrors };
 
 function errorMessage(error: PostgrestError): string {
   if (error.code === "23505") return "Another product already has this name.";
+  // Raised by the database when someone tries to change a fixed price (e.g. OralScan).
+  if (error.code === "P0001") return error.message;
   if (error.code === "42501") return "You don't have permission to change products.";
   if (error.code === "42P01" || error.code === "PGRST202") {
     return "The products table doesn't exist yet. Apply the latest database migration.";

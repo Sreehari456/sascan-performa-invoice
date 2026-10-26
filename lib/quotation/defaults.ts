@@ -31,6 +31,6 @@ export const DEFAULT_ITEM = {
   ].join("\n"),
   hsnCode: "90189099",
   quantity: "1",
-  rate: "730000",
+  rate: "750000",
   gstRate: DEFAULT_GST_RATE,
 };
