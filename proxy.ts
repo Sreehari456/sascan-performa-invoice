@@ -6,8 +6,7 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    // Skip static assets and image optimization files.
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
-  ],
+  // Only the pages that need a sign-in check. Everything else (static files,
+  // images, the home page) never runs the proxy.
+  matcher: ["/dashboard", "/dashboard/:path*", "/login"],
 };
